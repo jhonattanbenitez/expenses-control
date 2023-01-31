@@ -1,24 +1,41 @@
 import { useState } from 'react';
+import Message from './Message';
 import CloseBtn from '../img/close.svg';
-const Modal = ({ setModal, animateModal, setAnimateModal }) => {
+const Modal = ({ setModal, animateModal, setAnimateModal, saveExpense }) => {
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(0);
   const [category, setCategory] = useState('');
+  const [message, setMessage] = useState('');
   const hideModal = () => {
     setAnimateModal(false);
     setTimeout(() => {
       setModal(false);
     }, 500);
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if ([name, quantity, category].includes('')) {
+      setMessage('All fields are requiered');
+      return;
+    }
+    setTimeout(() => {
+        setMessage('');
+    }, 3000);
+    saveExpense({name, quantity, category})
+  };
   return (
     <div className="modal">
       <div className="close-modal">
         <img src={CloseBtn} alt="close modal" onClick={hideModal} />
       </div>
-      <form action="" className={`form ${animateModal ? 'animate' : 'close'}`}>
+      <form
+        onSubmit={handleSubmit}
+        action=""
+        className={`form ${animateModal ? 'animate' : 'close'}`}
+      >
         <legend>New Expense</legend>
+        {message && <Message type={'error'}>{message}</Message>}
         <div className="field">
-          <label htmlFor="name">Expense Name</label>
           <input
             type="text"
             name="name"
