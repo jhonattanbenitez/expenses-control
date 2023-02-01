@@ -30,8 +30,9 @@ function App() {
     }, 500);
   };
   return (
-    <>
+    <div className={modal ? 'fixed': ''}>
       <Header
+        expenses={expenses}
         budget={budget}
         setBudget={setBudget}
         isValidBudget={isValidBudget}
@@ -62,7 +63,7 @@ function App() {
           saveExpense={saveExpense}
         />
       )}
-    </>
+    </div>
   );
 }
 
