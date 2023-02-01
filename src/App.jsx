@@ -7,7 +7,7 @@ import ExpensesList from './components/ExpensesList';
 
 function App() {
   const [budget, setBudget] = useState(0);
-  const [isValidBudget, setIsValidBudget] = useState(0);
+  const [isValidBudget, setIsValidBudget] = useState(false);
   const [modal, setModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
   const [expenses, setExpenses] = useState([]);
@@ -21,6 +21,7 @@ function App() {
 
   const saveExpense = (expense) => {
     expense.id = idGenerator();
+    expense.date = Date.now();
     setExpenses([...expenses, expense]);
 
     setAnimateModal(false);
