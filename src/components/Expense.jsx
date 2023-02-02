@@ -1,4 +1,12 @@
 import React from 'react';
+import {
+  LeadingActions,
+  SwipeableList,
+  SwipeableListItem,
+  SwipeAction,
+  TrailingActions,
+} from 'react-swipeable-list';
+import 'react-swipeable-list/dist/styles.css';
 import { dateFormatter } from '../helpers';
 
 import SaveIcon from '../img/save_icon.svg';
@@ -23,23 +31,40 @@ const iconList = {
 
 const Expense = ({ expense }) => {
   const { name, quantity, category, date } = expense;
+  const leadingActions = () => (
+    <LeadingActions>
+      <SwipeAction onClick={() => console.log('editar')}>Edit</SwipeAction>
+    </LeadingActions>
+  );
+  const trailingActions = () => (
+    <TrailingActions>
+      <SwipeAction onClick={() => console.log('delete')}>Delete</SwipeAction>
+    </TrailingActions>
+  );
   return (
-    <div className="expense shadow">
-      <div className="expense-content">
-        <img src={iconList[category]} alt="" />
-        <div className="expense-description">
-          <p className="category">{category}</p>
-          <p className="expense-name">{name}</p>
-          <p className="expense-date">
-            Added on: {''}
-            <span>{dateFormatter(date)}</span>
-          </p>
+    <SwipeableList>
+      <SwipeableListItem
+        leadingActions={leadingActions()}
+        trailingActions={trailingActions()}
+      >
+        <div className="expense shadow">
+          <div className="expense-content">
+            <img src={iconList[category]} alt="" />
+            <div className="expense-description">
+              <p className="category">{category}</p>
+              <p className="expense-name">{name}</p>
+              <p className="expense-date">
+                Added on: {''}
+                <span>{dateFormatter(date)}</span>
+              </p>
+            </div>
+          </div>
+          <div className="expense-quantity">
+            <p>${quantity}</p>
+          </div>
         </div>
-      </div>
-      <div className="expense-quantity">
-        <p>${quantity}</p>
-      </div>
-    </div>
+      </SwipeableListItem>
+    </SwipeableList>
   );
 };
 
