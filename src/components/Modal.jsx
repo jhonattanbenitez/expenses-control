@@ -1,11 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Message from './Message';
 import CloseBtn from '../img/close.svg';
-const Modal = ({ setModal, animateModal, setAnimateModal, saveExpense }) => {
+const Modal = ({
+  setModal,
+  animateModal,
+  setAnimateModal,
+  saveExpense,
+  editExpense,
+}) => {
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(0);
   const [category, setCategory] = useState('');
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if(Object.keys(editExpense).length > 0) {
+        setName(editExpense.name);
+        setQuantity(editExpense.quantity);
+        setCategory(editExpense.category);
+    }
+  }, [])
+
   const hideModal = () => {
     setAnimateModal(false);
     setTimeout(() => {
@@ -19,9 +34,9 @@ const Modal = ({ setModal, animateModal, setAnimateModal, saveExpense }) => {
       return;
     }
     setTimeout(() => {
-        setMessage('');
+      setMessage('');
     }, 3000);
-    saveExpense({name, quantity, category})
+    saveExpense({ name, quantity, category });
   };
   return (
     <div className="modal">
