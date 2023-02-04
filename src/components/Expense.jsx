@@ -29,11 +29,11 @@ const iconList = {
   others: ExpenseIcon,
 };
 
-const Expense = ({ expense }) => {
+const Expense = ({ expense, setEditExpense }) => {
   const { name, quantity, category, date } = expense;
   const leadingActions = () => (
     <LeadingActions>
-      <SwipeAction onClick={() => console.log('editar')}>Edit</SwipeAction>
+      <SwipeAction onClick={() => setEditExpense(expense)}>Edit</SwipeAction>
     </LeadingActions>
   );
   const trailingActions = () => (
