@@ -11,37 +11,50 @@ function App() {
   const [modal, setModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
   const [expenses, setExpenses] = useState([]);
-  const [editExpense, setEditExpense] = useState({})
+  const [editExpense, setEditExpense] = useState({});
 
   useEffect(() => {
-    if(Object.keys(editExpense).length > 0) {
+    if (Object.keys(editExpense).length > 0) {
       setModal(true);
       setTimeout(() => {
         setAnimateModal(true);
       }, 500);
     }
-  }, [editExpense])
+  }, [editExpense]);
 
   const handleNewExpense = () => {
     setModal(true);
-    setEditExpense({})
+    setEditExpense({});
     setTimeout(() => {
       setAnimateModal(true);
     }, 500);
   };
 
   const saveExpense = (expense) => {
-    expense.id = idGenerator();
-    expense.date = Date.now();
-    setExpenses([...expenses, expense]);
-
+    if (expense.id) {
+      //Update Expense
+      const updatedExpenses = expenses.map((expenseState) =>
+        expenseState.id === expense.id ? expense : expenseState
+      );
+      setExpenses(updatedExpenses);
+    } else {
+      //new expense
+      expense.id = idGenerator();
+      expense.date = Date.now();
+      setExpenses([...expenses, expense]);
+    }
     setAnimateModal(false);
     setTimeout(() => {
       setModal(false);
     }, 500);
   };
+
+  const deleteExpense = (id) => {
+    const deletedExpense = expenses.filter(expense => expense.id !== id)
+    setExpenses(deletedExpense)
+  };
   return (
-    <div className={modal ? 'fixed': ''}>
+    <div className={modal ? 'fixed' : ''}>
       <Header
         expenses={expenses}
         budget={budget}
@@ -51,12 +64,13 @@ function App() {
       />
       {isValidBudget && (
         <>
-        <main>
-          <ExpensesList 
-            expenses={expenses}
-            setEditExpense={setEditExpense}
-          />
-        </main>
+          <main>
+            <ExpensesList
+              expenses={expenses}
+              setEditExpense={setEditExpense}
+              deleteExpense={deleteExpense}
+            />
+          </main>
           <div className="new-expense">
             <img
               src={NewExpenseIcon}

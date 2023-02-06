@@ -29,8 +29,8 @@ const iconList = {
   others: ExpenseIcon,
 };
 
-const Expense = ({ expense, setEditExpense }) => {
-  const { name, quantity, category, date } = expense;
+const Expense = ({ expense, setEditExpense, deleteExpense }) => {
+  const { name, quantity, category, date, id } = expense;
   const leadingActions = () => (
     <LeadingActions>
       <SwipeAction onClick={() => setEditExpense(expense)}>Edit</SwipeAction>
@@ -38,7 +38,9 @@ const Expense = ({ expense, setEditExpense }) => {
   );
   const trailingActions = () => (
     <TrailingActions>
-      <SwipeAction onClick={() => console.log('delete')}>Delete</SwipeAction>
+      <SwipeAction onClick={() => deleteExpense(id)} destructive={true}>
+        Delete
+      </SwipeAction>
     </TrailingActions>
   );
   return (
