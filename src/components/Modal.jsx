@@ -12,14 +12,18 @@ const Modal = ({
   const [quantity, setQuantity] = useState(0);
   const [category, setCategory] = useState('');
   const [message, setMessage] = useState('');
+  const [id, setId] = useState('');
+  const [date, setDate] = useState('');
 
   useEffect(() => {
-    if(Object.keys(editExpense).length > 0) {
-        setName(editExpense.name);
-        setQuantity(editExpense.quantity);
-        setCategory(editExpense.category);
+    if (Object.keys(editExpense).length > 0) {
+      setName(editExpense.name);
+      setQuantity(editExpense.quantity);
+      setCategory(editExpense.category);
+      setId(editExpense.id);
+      setDate(editExpense.date);
     }
-  }, [])
+  }, []);
 
   const hideModal = () => {
     setAnimateModal(false);
@@ -36,7 +40,7 @@ const Modal = ({
     setTimeout(() => {
       setMessage('');
     }, 3000);
-    saveExpense({ name, quantity, category });
+    saveExpense({ name, quantity, category, id, date });
   };
   return (
     <div className="modal">
@@ -48,7 +52,7 @@ const Modal = ({
         action=""
         className={`form ${animateModal ? 'animate' : 'close'}`}
       >
-        <legend>New Expense</legend>
+        <legend>{editExpense.name ? 'Edit Expense' : 'New Expense'}</legend>
         {message && <Message type={'error'}>{message}</Message>}
         <div className="field">
           <input
@@ -90,7 +94,10 @@ const Modal = ({
             <option value="others">Others</option>
           </select>
         </div>
-        <input type="submit" value="add expense" />
+        <input
+          type="submit"
+          value={editExpense.name ? 'Save Expense' : 'add expense'}
+        />
       </form>
     </div>
   );
