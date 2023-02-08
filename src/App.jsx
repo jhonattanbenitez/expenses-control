@@ -4,15 +4,25 @@ import Header from './components/Header';
 import Modal from './components/Modal';
 import { idGenerator } from './helpers';
 import ExpensesList from './components/ExpensesList';
+import Filters from './components/Filters';
 
 function App() {
-  const [budget, setBudget] = useState(0);
+  const [budget, setBudget] = useState(
+    Number(localStorage.getItem('budget')) ?? 0
+  );
   const [isValidBudget, setIsValidBudget] = useState(false);
   const [modal, setModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
-  const [expenses, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState(
+    localStorage.getItem('expenses')
+      ? JSON.parse(localStorage.getItem('expenses'))
+      : []
+  );
   const [editExpense, setEditExpense] = useState({});
 
+  const [filter, setFilter] = useState('')
+  const [filteredExpense, setFilteredExpense] = useState([])
+ 
   useEffect(() => {
     if (Object.keys(editExpense).length > 0) {
       setModal(true);
@@ -30,6 +40,29 @@ function App() {
     }, 500);
   };
 
+  useEffect(() => {
+    localStorage.setItem('budget', budget ?? 0);
+  }, [budget]);
+
+  useEffect(() => {
+    localStorage.setItem('expenses', JSON.stringify(expenses) ?? []);
+  }, [expenses]);
+
+  useEffect(() => {
+    if(filter) {
+      // Filter expenses by category
+      const filteredExpenses = expenses.filter(expense => expense.category === filter)
+      setFilteredExpense(filteredExpenses)
+    }
+  }, [filter])
+
+  useEffect(() => {
+    const budgetLS = Number(localStorage.getItem('budget')) ?? 0;
+    if (budgetLS > 0) {
+      setIsValidBudget(true);
+    }
+  }, []);
+
   const saveExpense = (expense) => {
     if (expense.id) {
       //Update Expense
@@ -37,7 +70,7 @@ function App() {
         expenseState.id === expense.id ? expense : expenseState
       );
       setExpenses(updatedExpenses);
-      setEditExpense({})
+      setEditExpense({});
     } else {
       //new expense
       expense.id = idGenerator();
@@ -51,8 +84,8 @@ function App() {
   };
 
   const deleteExpense = (id) => {
-    const deletedExpense = expenses.filter(expense => expense.id !== id)
-    setExpenses(deletedExpense)
+    const deletedExpense = expenses.filter((expense) => expense.id !== id);
+    setExpenses(deletedExpense);
   };
   return (
     <div className={modal ? 'fixed' : ''}>
@@ -66,10 +99,17 @@ function App() {
       {isValidBudget && (
         <>
           <main>
+            <Filters
+              filter={filter}
+              setFilter={setFilter}
+             />
             <ExpensesList
               expenses={expenses}
               setEditExpense={setEditExpense}
               deleteExpense={deleteExpense}
+              filter={filter}
+              filteredExpense={filteredExpense}
+
             />
           </main>
           <div className="new-expense">
@@ -81,7 +121,6 @@ function App() {
           </div>
         </>
       )}
-
       {modal && (
         <Modal
           setModal={setModal}
