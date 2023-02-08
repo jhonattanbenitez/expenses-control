@@ -37,6 +37,7 @@ function App() {
         expenseState.id === expense.id ? expense : expenseState
       );
       setExpenses(updatedExpenses);
+      setEditExpense({})
     } else {
       //new expense
       expense.id = idGenerator();
@@ -88,6 +89,7 @@ function App() {
           setAnimateModal={setAnimateModal}
           saveExpense={saveExpense}
           editExpense={editExpense}
+          setEditExpense={setEditExpense}
         />
       )}
     </div>
