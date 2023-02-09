@@ -20,9 +20,9 @@ function App() {
   );
   const [editExpense, setEditExpense] = useState({});
 
-  const [filter, setFilter] = useState('')
-  const [filteredExpense, setFilteredExpense] = useState([])
- 
+  const [filter, setFilter] = useState('');
+  const [filteredExpense, setFilteredExpense] = useState([]);
+
   useEffect(() => {
     if (Object.keys(editExpense).length > 0) {
       setModal(true);
@@ -49,12 +49,14 @@ function App() {
   }, [expenses]);
 
   useEffect(() => {
-    if(filter) {
+    if (filter) {
       // Filter expenses by category
-      const filteredExpenses = expenses.filter(expense => expense.category === filter)
-      setFilteredExpense(filteredExpenses)
+      const filteredExpenses = expenses.filter(
+        (expense) => expense.category === filter
+      );
+      setFilteredExpense(filteredExpenses);
     }
-  }, [filter])
+  }, [filter]);
 
   useEffect(() => {
     const budgetLS = Number(localStorage.getItem('budget')) ?? 0;
@@ -91,6 +93,7 @@ function App() {
     <div className={modal ? 'fixed' : ''}>
       <Header
         expenses={expenses}
+        setExpenses={setExpenses}
         budget={budget}
         setBudget={setBudget}
         isValidBudget={isValidBudget}
@@ -99,17 +102,13 @@ function App() {
       {isValidBudget && (
         <>
           <main>
-            <Filters
-              filter={filter}
-              setFilter={setFilter}
-             />
+            <Filters filter={filter} setFilter={setFilter} />
             <ExpensesList
               expenses={expenses}
               setEditExpense={setEditExpense}
               deleteExpense={deleteExpense}
               filter={filter}
               filteredExpense={filteredExpense}
-
             />
           </main>
           <div className="new-expense">

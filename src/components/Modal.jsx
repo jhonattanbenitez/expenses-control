@@ -7,7 +7,7 @@ const Modal = ({
   setAnimateModal,
   saveExpense,
   editExpense,
-  setEditExpense
+  setEditExpense,
 }) => {
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(0);
